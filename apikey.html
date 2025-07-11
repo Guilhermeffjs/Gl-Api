@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Erro 404 - Apikey Inválida</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        linear-gradient(rgba(11,11,11,0.55), rgba(11,11,11,0.55)),
+        url('https://i.ibb.co/WNjrW50Y/d080a299b0d124ea6fdaa6fcf5eb6427.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Poppins', sans-serif;
+      color: #e0e8f0;
+    }
+
+    .container {
+      text-align: center;
+      padding: 60px 40px;
+      background: rgba(28, 28, 28, 0.55);
+      backdrop-filter: saturate(180%) blur(15px);
+      border-radius: 16px;
+      box-shadow: 0 0 30px #1e90ffaa;
+      max-width: 400px;
+      width: 90%;
+      color: #e0e8f0;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      color: #1e90ff; /* Azul */
+      margin-bottom: 15px;
+      text-shadow: 0 0 8px #1e90ffaa;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      color: #a0b8ff;
+      margin-bottom: 30px;
+    }
+
+    .back-link {
+      display: inline-block;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background-color: #1e90ff; /* Azul */
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 0 10px #1e90ffaa;
+    }
+
+    .back-link:hover {
+      background-color: #60b6ff; /* Azul mais claro */
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px #60b6ffaa;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.4rem;
+      }
+
+      h2 {
+        font-size: 1.1rem;
+      }
+
+      .back-link {
+        padding: 10px 22px;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Erro 404</h1>
+    <h2>Apikey Inválida</h2>
+    <a href="/" class="back-link">Voltar ao site</a>
+  </div>
+</body>
+</html>

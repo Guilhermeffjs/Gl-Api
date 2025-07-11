@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>APIS GL - Acesso Rápido</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url('https://i.ibb.co/WNjrW50Y/d080a299b0d124ea6fdaa6fcf5eb6427.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 25px 20px;
+      max-width: 300px;  
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 3px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #1e90ff; /* Azul */
+      text-shadow: 0 0 8px #1e90ffaa;
+    }
+
+    .role {
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 26px;
+      background: linear-gradient(90deg, #1e90ff, #0072ff);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 0 15px rgba(30, 144, 255, 0.7);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 30px rgba(30, 144, 255, 1);
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 0.8rem;
+      color: #bbb;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <img src="https://i.ibb.co/3mgTtgTn/deb4bf93adbfb72721f2e1d8d76e2104.jpg" alt="iguro Avatar" class="avatar" />
+    <div class="role"> </div>
+    <a href="/docs" class="btn">Acessar API</a>
+    <div class="footer">Desenvolvido por Gl.itzzy</div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+  * {
+    margin: 0; padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background:
+      linear-gradient(rgba(11,11,11,0.5), rgba(11,11,11,0.5)),
+      url('https://i.ibb.co/WNjrW50Y/d080a299b0d124ea6fdaa6fcf5eb6427.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #e0e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+  }
+  h1 {
+    color: #1e90ff;
+    margin-bottom: 30px;
+    font-weight: 700;
+    text-shadow: 0 0 8px #1e90ffaa;
+  }
+  .container {
+    background: rgba(28,28,28,0.55);
+    backdrop-filter: saturate(180%) blur(15px);
+    border-radius: 14px;
+    box-shadow: 0 0 20px #1e90ffaa;
+    padding: 30px 35px;
+    max-width: 450px;
+    width: 100%;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+  label {
+    font-weight: 600;
+    color: #88bfff;
+  }
+  input[type="text"], input[type="password"], input[type="number"] {
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #1e90ff;
+    border-radius: 8px;
+    background: rgba(17,17,17,0.6);
+    color: #d0e7ff;
+    transition: border-color 0.3s ease;
+  }
+  input[type="text"]:focus, input[type="password"]:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: #60b6ff;
+    box-shadow: 0 0 10px #60b6ff;
+    background: rgba(20,40,60,0.9);
+    color: #e8f0ff;
+  }
+  button {
+    background: #1e90ff;
+    color: #fff;
+    border: none;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  button:hover {
+    background: #60b6ff;
+    box-shadow: 0 0 18px #60b6ff;
+  }
+  .response {
+    min-height: 48px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #88bfff;
+    white-space: pre-wrap;
+  }
+  .response.error {
+    color: #ff6666;
+  }
+  .section-title {
+    font-size: 1.3rem;
+    color: #1e90ff;
+    margin-bottom: 15px;
+    text-align: center;
+    text-shadow: 0 0 6px #1e90ffbb;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <section id="add-section">
+      <div class="section-title">Adicionar API Key</div>
+      <form id="add-key-form">
+        <label for="add-apikey">API Key</label>
+        <input type="text" id="add-apikey" name="apikey" placeholder="Digite a chave" required minlength="3" />
+        
+        <label for="add-password">Senha de Admin</label>
+        <input type="password" id="add-password" name="senha" placeholder="Senha oficial" required minlength="3" />
+
+        <label for="add-requests">Número de Requisições</label>
+        <input type="number" id="add-requests" name="requests" placeholder="Ex: 1000" min="1" required />
+
+        <button type="submit">Adicionar Key</button>
+      </form>
+      <div id="add-response" class="response"></div>
+    </section>
+
+    <hr style="border: 1px solid #1e90ff88; margin: 30px 0;" />
+
+    <section id="del-section">
+      <div class="section-title">Deletar API Key</div>
+      <form id="del-key-form">
+        <label for="del-apikey">API Key</label>
+        <input type="text" id="del-apikey" name="apikey" placeholder="Digite a chave" required minlength="3" />
+
+        <label for="del-password">Senha de Admin</label>
+        <input type="password" id="del-password" name="senha" placeholder="Senha oficial" required minlength="3" />
+
+        <button type="submit">Deletar Key</button>
+      </form>
+      <div id="del-response" class="response"></div>
+    </section>
+  </div>
+
+<script>
+  const addForm = document.getElementById('add-key-form');
+  const delForm = document.getElementById('del-key-form');
+  const addResponse = document.getElementById('add-response');
+  const delResponse = document.getElementById('del-response');
+
+  addForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const apikey = e.target.apikey.value.trim();
+    const senha = e.target.senha.value.trim();
+    const requests = e.target.requests.value.trim();
+
+    if (!apikey || !senha || !requests) {
+      addResponse.textContent = 'Preencha todos os campos.';
+      addResponse.classList.add('error');
+      return;
+    }
+    addResponse.textContent = 'Processando...';
+    addResponse.classList.remove('error');
+
+    // Monta o parâmetro 'a' no formato esperado: apikey|senha|requests
+    const paramA = encodeURIComponent(`${apikey}|${senha}|${requests}`);
+
+    try {
+      const res = await fetch(`/api/add-key?a=${paramA}`);
+      const data = await res.json();
+
+      if (data.resultado) {
+        // Remove o nome "dantes15s" da resposta
+        let msg = data.resultado.replace(/dantes15s/g, '');
+        addResponse.textContent = msg.trim();
+        addResponse.classList.remove('error');
+      } else {
+        addResponse.textContent = 'Resposta inesperada do servidor.';
+        addResponse.classList.add('error');
+      }
+    } catch {
+      addResponse.textContent = 'Erro ao conectar com o servidor.';
+      addResponse.classList.add('error');
+    }
+  });
+
+  delForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const apikey = e.target.apikey.value.trim();
+    const senha = e.target.senha.value.trim();
+
+    if (!apikey || !senha) {
+      delResponse.textContent = 'Preencha todos os campos.';
+      delResponse.classList.add('error');
+      return;
+    }
+    delResponse.textContent = 'Processando...';
+    delResponse.classList.remove('error');
+
+    // Monta a URL com parâmetros
+    const url = `/api/del-key?apikey=${encodeURIComponent(apikey)}&senha=${encodeURIComponent(senha)}`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.msg) {
+        // Remove o nome "dantes15s" da resposta
+        let msg = data.msg.replace(/dantes15s/g, '');
+        delResponse.textContent = msg.trim();
+        delResponse.classList.remove('error');
+      } else {
+        delResponse.textContent = 'Resposta inesperada do servidor.';
+        delResponse.classList.add('error');
+      }
+    } catch {
+      delResponse.textContent = 'Erro ao conectar com o servidor.';
+      delResponse.classList.add('error');
+    }
+  });
+</script>
+
+</body>
+</html>

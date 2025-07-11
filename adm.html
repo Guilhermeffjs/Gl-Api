@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlBot - Assistente da API</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      font-family: 'Poppins', sans-serif;
+      background: 
+        linear-gradient(rgba(0, 0, 0, 0.7), rgba(0,0,0,0.8)),
+        url('https://i.ibb.co/WNjrW50Y/d080a299b0d124ea6fdaa6fcf5eb6427.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: rgba(0,0,0,0.6);
+      padding: 20px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      color: #1e90ff;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background-color: #1e90ff;
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background-color: rgba(255,255,255,0.1);
+      color: #cce6ff;
+      border: 1px solid rgba(30,144,255,0.4);
+      border-bottom-left-radius: 4px;
+    }
+
+    .questions {
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .question-btn {
+      padding: 10px 16px;
+      background-color: rgba(30,144,255,0.3);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .question-btn:hover {
+      background-color: #1e90ff;
+    }
+
+    .chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: rgba(30,144,255,0.6);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .msg {
+        font-size: 14px;
+        max-width: 95%;
+      }
+      .question-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>GlBot - Assistente Virtual da API</header>
+
+  <div class="chat-container" id="chat">
+    <div class="msg bot">Olá! 👋 Eu sou o GlBot. Selecione uma pergunta abaixo para saber mais sobre a API:</div>
+  </div>
+
+  <div class="questions">
+    <button class="question-btn" onclick="responder('como')">Como funciona a API?</button>
+    <button class="question-btn" onclick="responder('chave')">Como obter minha chave?</button>
+    <button class="question-btn" onclick="responder('exemplo')">Me mostra um exemplo</button>
+    <button class="question-btn" onclick="responder('recursos')">Quais recursos a API tem?</button>
+    <button class="question-btn" onclick="responder('limite')">Minha chave tem limite?</button>
+    <button class="question-btn" onclick="responder('contato')">Falar com o dono?</button>
+    <button class="question-btn" onclick="responder('obrigado')">Obrigado!</button>
+  </div>
+
+  <script>
+    function responder(tipo) {
+      const chat = document.getElementById('chat');
+
+      const perguntas = {
+        como: "Como funciona a API?",
+        chave: "Como obter minha chave?",
+        exemplo: "Me mostra um exemplo",
+        recursos: "Quais recursos a API tem?",
+        limite: "Minha chave tem limite?",
+        contato: "Falar com o dono?",
+        obrigado: "Obrigado!"
+      };
+
+      const respostas = {
+        como: "O Gl API funciona via requisições HTTP (GET) com sua <b>apikey</b>. Você escolhe a rota e coloca sua chave.",
+        chave: "Você pode adquirir sua chave acessando a <a href='/planos' style='color:#60b6ff' target='_blank'>loja oficial de planos</a>.",
+        exemplo: "Exemplo de uso:<br><code>/api/play-audio?title=matuê groupies&apikey=SUA_KEY</code>",
+        recursos: "A API oferece:<br>🎵 YouTube/TikTok Downloader<br>🎨 Plaquinhas<br>🧠 IA (Gemini)<br>🌤️ Clima<br>😂 Piadas<br>e muito mais!",
+        limite: "Sim. Chaves gratuitas têm limite diário. Planos premium liberam uso estendido.",
+        contato: "Claro! Você pode falar diretamente com o dono clicando aqui:<br><a href='https://wa.me/557388623906' target='_blank' style='color:#60b6ff'>👉 Entrar em contato via WhatsApp</a>",
+        obrigado: "De nada! 😊 Qualquer coisa, estou por aqui."
+      };
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'msg user';
+      userMsg.innerText = perguntas[tipo];
+      chat.appendChild(userMsg);
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'msg bot';
+      botMsg.innerHTML = respostas[tipo];
+      chat.appendChild(botMsg);
+
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>

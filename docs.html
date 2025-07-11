@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GL APIS</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(11,11,11,0.4), rgba(11,11,11,0.4)),
+        url('https://i.ibb.co/j94rXzPN/407de234da5fa29d41dfdb95957fb946.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #e0e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 70px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    :root {
+      --main-blue: #a0a0a0;
+      --main-blue-light: #d4d4d4;
+      --main-blue-shadow: rgba(160,160,160,0.3);
+    }
+    .top-bar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 15px 25px;
+      background: rgba(160,160,160,0.25);
+      backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid rgba(160,160,160,0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 2px 12px var(--main-blue-shadow);
+      user-select: none;
+    }
+    .top-bar h5 {
+      font-size: 18px;
+      color: var(--main-blue);
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .menu-btn, .adm-btn {
+      background: rgba(30,144,255,0.35);
+      color: var(--main-blue);
+      font-size: 14px;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      box-shadow: 0 0 10px var(--main-blue-shadow);
+    }
+    .menu-btn:hover, .adm-btn:hover {
+      background: var(--main-blue);
+      color: #fff;
+      box-shadow: 0 0 18px var(--main-blue);
+      border: none;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: -270px;
+      top: 0;
+      width: 260px;
+      height: 100%;
+      background: rgba(31,31,31,0.4);
+      backdrop-filter: saturate(180%) blur(15px);
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 2000;
+      border-right: 1px solid rgba(160,160,160,0.3);
+      box-shadow: 2px 0 18px var(--main-blue-shadow);
+    }
+    .sidebar.show {
+      left: 0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: var(--main-blue);
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.3s ease;
+    }
+    .close-btn:hover {
+      color: var(--main-blue-light);
+    }
+    .menu-category {
+      padding: 15px;
+      color: var(--main-blue);
+      border-bottom: 1px solid rgba(160,160,160,0.3);
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: background 0.25s ease;
+    }
+    .menu-category:hover {
+      background: rgba(160,160,160,0.15);
+    }
+    .submenu {
+      display: none;
+      background: rgba(38,38,38,0.4);
+      backdrop-filter: saturate(180%) blur(10px);
+      padding: 0 15px;
+    }
+    .submenu.show {
+      display: block;
+    }
+    .submenu a {
+      color: #cde6ff;
+      text-decoration: none;
+      display: block;
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(160,160,160,0.3);
+      transition: color 0.25s ease;
+    }
+    .submenu a:hover {
+      color: var(--main-blue-light);
+    }
+    main {
+      margin-top: 100px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      width: 100%;
+    }
+    .card {
+      background: rgba(28,28,28,0.45);
+      backdrop-filter: saturate(180%) blur(15px);
+      border-radius: 12px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 0 20px var(--main-blue-shadow);
+      text-align: center;
+      border: 1px solid rgba(30,144,255,0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px var(--main-blue);
+    }
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .card-header .icon {
+      font-size: 36px;
+      color: var(--main-blue);
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 4px var(--main-blue));
+    }
+    .card-header h2 {
+      font-size: 20px;
+      color: var(--main-blue);
+      font-weight: 700;
+    }
+    .description {
+      font-size: 14px;
+      color: #a7cdfd;
+      margin: 10px 0 20px;
+      min-height: 36px;
+    }
+    .btn {
+      background: var(--main-blue);
+      color: #fff;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 0 12px var(--main-blue-shadow);
+      user-select: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover {
+      background: var(--main-blue-light);
+      box-shadow: 0 0 22px var(--main-blue-light);
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0 20px;
+      background: rgba(17,17,17,0.6);
+      border: 1px solid var(--main-blue);
+      border-radius: 8px;
+      color: #d0e7ff;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--main-blue-light);
+      background: rgba(20,40,60,0.9);
+      box-shadow: 0 0 8px var(--main-blue-light);
+      color: #e8f0ff;
+    }
+    footer {
+      text-align: center;
+      margin: 40px 0 20px;
+      color: rgba(170, 210, 255, 0.7);
+      font-size: 14px;
+      user-select: none;
+    }
+    .chat-float-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 55px;
+      height: 55px;
+      background-color: var(--main-blue);
+      color: white;
+      border-radius: 50%;
+      box-shadow: 0 0 15px var(--main-blue-shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+      animation: float-bounce 2.5s infinite;
+      z-index: 3000;
+    }
+    @keyframes float-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @media (max-width: 600px) {
+      .top-bar h5 { font-size: 16px; }
+      .card { width: 90%; }
+      main { padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Abrir menu"><i class="fas fa-bars"></i></button>
+    <h5>GL APIS</h5>
+    <button class="adm-btn" onclick="location.href='jogo'" aria-label="Área do administrador"><i class="fas fa-crown"></i></button>
+  </div>
+
+  <div class="sidebar" id="sidebar" aria-label="Navegação lateral">
+    <button class="close-btn" onclick="toggleMenu()" aria-label="Fechar menu"><i class="fas fa-times"></i></button>
+    <div class="menu-category" tabindex="0" onclick="toggleSubmenu('DOWNLOADS')">Downloads</div>
+    <div class="submenu" id="DOWNLOADS" role="region" aria-hidden="true">
+      <a href="/api/play-audio?title=matuê%20groupies&apikey=SuaKey">Play Mp3</a>
+      <a href="/api/youtube-mp4?title=digite%20o%20nome%20do%20v%C3%ADdeo&apikey=sua_apikey">Play Mp4</a>
+      <a href="/api/tiktok?link=https://vm.tiktok.com/ZMSFoFhES/&apikey=SuaKey">tiktokdl</a>
+    </div>
+    <div class="menu-category" tabindex="0" onclick="toggleSubmenu('PESQUISAS')">PESQUISAS</div>
+    <div class="submenu" id="PESQUISAS" role="region" aria-hidden="true">
+     <a href="/api/pinterest?q=SeuTextoAqui&apikey=SuaKey">pinterest</a>
+    </div>
+    <div class="menu-category" tabindex="0" onclick="toggleSubmenu('PLAQUINHAS')">PLAQUINHAS</div>
+    <div class="submenu" id="PLAQUINHAS" role="region" aria-hidden="true">
+      <a href="/api/plaq?apikey=SuaApiKey&texto=TexT"">Plaq</a>
+      <a href="/api/plaq2?apikey=SuaApiKey&texto=TexT">Plaq 2</a>
+      <a href="/api/plaq3?apikey=SuaApiKey&texto=TexT">Plaq 3</a>
+      <a href="/api/plaq4?apikey=SuaApiKey&texto=TexT">Plaq 4</a>
+      <a href="/api/plaq5?apikey=SuaApiKey&texto=TexT">Plaq 5</a>
+      <a href="/api/plaq6?apikey=SuaApiKey&texto=TexT">Plaq 6</a>
+      <a href="/api/plaq7?apikey=SuaApiKey&texto=TexT">Plaq 7</a>
+      <a href="/api/plaq8?apikey=SuaApiKey&texto=TexT">Plaq 8</a>
+      <a href="/api/plaq9?apikey=SuaApiKey&texto=TexT">Plaq 9</a>
+      <a href="/api/plaq10?apikey=SuaApiKey&texto=TexT">Plaq 10</a>
+    </div>
+      <div class="menu-category" tabindex="0" onclick="toggleSubmenu('FIGURINHAS')">FIGURINHAS</div>
+    <div class="submenu" id="FIGURINHAS" role="region" aria-hidden="true">
+    <a href="/api/figcoreana?apikey=SuaKey">figcoreana</a>
+    <a href="/api/figaleatoria?apikey=SuaKey">figaleatoria</a>
+    <a href="/api/figemoji?apikey=SuaKey">figemoji</a>
+    <a href="/api/figanime?apikey=SuaKey">figanime</a>
+    <a href="/api/figanimais?apikey=SuaKey">figanimais</a>
+    <a href="/api/figraiva?apikey=SuaKey">figraiva</a>
+    <a href="/api/figengracada?apikey=SuaKey">figengracada</a>
+    <a href="/api/figroblox?apikey=SuaKey">figroblox</a>
+    <a href="/api/ttp?texto=SeuTextoAqui&apikey=SuaKey">ttp</a>
+    <a href="/api/ttp2?texto=SeuTextoAqui&apikey=SuaKey">ttp2</a>
+    <a href="/api/ttp3?texto=SeuTextoAqui&apikey=SuaKey">ttp3</a>
+    <a href="/api/attp?texto=SeuTextoAqui&apikey=SuaKey">attp</a>
+    </div>
+    <div class="menu-category" tabindex="0" onclick="toggleSubmenu('INTELIGÊNCIA IA')">INTELIGÊNCIA IA</div>
+    <div class="submenu" id="INTELIGÊNCIA IA" role="region" aria-hidden="true">
+      <a href="http://localhost:3000/api/gemini?texto=O%20que%20é%20inteligência%20artificial&apikey=suachave123">Gemini 2.0</a>
+      <a href="/api/google-image?nome=naruto&apikey=SuaKey">Gimage</a>
+    </div>
+    <div class="menu-category" tabindex="0" onclick="toggleSubmenu('ALEATÓRIOS')">ALEATÓRIOS</div>
+    <div class="submenu" id="ALEATÓRIOS" role="region" aria-hidden="true">
+       <a href="/api/gerarnick?nome=gl.itzzy&apikey=SuaKey">gerar nick</a>
+      <a href="/api/signo?signo=touro&apikey=SuaKey">Signo Horóscopo</a>
+      <a href="/api/anime?nome=jujutsu&apikey=SuaKey">Pesquisar Animes</a>
+      <a href="/api/piada?apikey=SuaKey">Piadas</a>
+      <a href="http://localhost:3000/api/motivacional?apikey=SuaKey">Motivacional</a>
+      <a href="/api/clima?cidade=sao%20paulo&apikey=SuaKey">Clima Temporal</a>
+      <a href="/api/cachorro?apikey=SuaKey">img Dog</a>
+      <a href="/api/raposa?apikey=sua_chave_aqui">Clima Temporal</a>
+      <a href="/api/cachorro?apikey=SuaKey">img Fox</a>
+      <a href="/api/gato?apikey=SUA_KEY">Clima Temporal</a>
+      <a href="/api/cachorro?apikey=SuaKey">img Gato</a>
+    </div>
+  </div>
+
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-network-wired icon"></i>
+        <h2>Seu IP</h2>
+      </div>
+      <p class="description" id="ip-address">Carregando...</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-key icon"></i>
+        <h2>Comprar Chave</h2>
+      </div>
+      <a class="btn" href="/planos">Ir para Loja</a>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <i class="fas fa-shield-alt icon"></i>
+        <h2>Verificar Key</h2>
+      </div>
+      <form id="key-form">
+        <input class="form-control" type="text" name="apikey" placeholder="Insira sua chave" required />
+        <button type="submit" class="btn">Verificar</button>
+      </form>
+      <p id="api-status" class="description"></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2025 GL APIS | Todos os direitos reservados</p>
+  </footer>
+
+  <!-- Botão flutuante -->
+<button class="adm-btn chat-float-btn" onclick="location.href='/adm'" title="Abrir Chatbot" aria-label="Abrir Chatbot">
+  <i class="fas fa-comments"></i>
+</button>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('show');
+    }
+    function toggleSubmenu(id) {
+      const submenu = document.getElementById(id);
+      submenu.classList.toggle('show');
+      submenu.setAttribute('aria-hidden', submenu.classList.contains('show') ? 'false' : 'true');
+    }
+    document.getElementById('key-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const apikey = event.target.apikey.value.trim();
+      const apiStatus = document.getElementById('api-status');
+      apiStatus.style.color = 'var(--main-blue)';
+      apiStatus.textContent = 'Verificando...';
+      fetch(`/api/keyerrada?apikey=${apikey}`)
+        .then(res => res.json())
+        .then(data => {
+          apiStatus.style.color = 'var(--main-blue)';
+          apiStatus.textContent = data.key || 'Chave inválida.';
+        })
+        .catch(() => {
+          apiStatus.style.color = '#ff5555';
+          apiStatus.textContent = 'Erro ao verificar. Tente novamente.';
+        });
+    });
+    window.onload = function() {
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('ip-address').innerText = data.ip;
+        });
+    };
+  </script>
+</body>
+</html>
